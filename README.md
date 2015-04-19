@@ -5,4 +5,4 @@
 # 大家按自己的名字的拼音，建立目录并提交作业
 
 ## 用以下命令去把项目克隆下来
-  git clone git@github.com:51reboot/homework-arch-4.git
+  - git clone git@github.com:51reboot/homework-arch-4.git
