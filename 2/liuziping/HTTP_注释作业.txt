@@ -1,31 +1,29 @@
 请求头：
 GET http://www.zhihu.com/ HTTP/1.1   发送一个get请求,由于使用了代理，url写全了，非代理直接 / 访问根 ，使用的是http1.1协议
 Host: www.zhihu.com                  发送请求目标主机的域名
-Proxy-Connection: keep-alive
-表明这个请求是走了代理，不走代理应该是connection：keep-alive，表示保持连接
-Cache-Control: max-age=0       缓存设置，max-age<=0向server发请求确认是否有更新，max-age>0 表示直接从浏览器中提取，no-cache
+Proxy-Connection: keep-alive         表明这个请求是走了代理，不走代理应该是connection：keep-alive，保持连接
+Cache-Control: max-age=0             缓存设置，max-age<=0向server发请求确认是否有更新，有更新就访问服务器，没更新就走本地缓存，max-age>0 表示直接从浏览器中提取，no-cache
 表示不走缓存，强制每次都访问服务器
-Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8     告诉服务器能支持的数据类型
+Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8     告诉服务器浏览器支持的数据类型
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36
-DNT: 1      发送请求的浏览器和操作系统信息
-Accept-Encoding: gzip, deflate, sdch   告诉服务器客户端支持的解码格式
-Accept-Language: zh-CN,zh;q=0.8        告诉服务器客户端支持的语言
+DNT: 1                                   告诉服务器发送请求的浏览器和操作系统信息
+Accept-Encoding: gzip, deflate, sdch     告诉服务器客户端支持的解码格式
+Accept-Language: zh-CN,zh;q=0.8          告诉服务器客户端支持的语言
 Cookie: _ga=GA1.2.1504299805.1423378481; 把本地的cookie信息发送给服务器   
 
 响应头：
 HTTP/1.1 200 OK                 200 表示成功返回信息，30*表示重定向，40*都是请求url有问题， 50*表示问题在服务器端
 Server: zhihu_nginx             响应服务器的名字
-Date: Sun, 19 Apr 2015 11:30:36 GMT        响应时间为格林威治时间
+Date: Sun, 19 Apr 2015 11:30:36 GMT         响应时间为格林威治时间
 Content-Type: text/html; charset=UTF-8      返回内容格式已经编码信息
-Vary: Accept-Encoding   告诉代理服务器，返回内容采用压缩的方式
+Vary: Accept-Encoding                       告诉代理服务器，返回内容采用压缩的方式
 Content-Security-Policy: default-src *; frame-src *.zhihu.com getpocket.com note.youdao.com; script-src *.zhihu.com *.google-analytics.com zhstatic.zhihu.com 'unsafe-eval'; style-src *.zhihu.com 'unsafe-inline'
-Set-Cookie: r_c=1; Domain=zhihu.com; Path=/
-Expires: Fri, 02 Jan 2000 00:00:00 GMT 内容的过期时间
-Vary: Accept-Encoding
-Pragma: no-cache         内容不缓存
+Set-Cookie: r_c=1; Domain=zhihu.com; Path=/ 这个规范与内容安全有关，主要是用来定义页面可以加载哪些资源，减少XSS的发生。
+Expires: Fri, 02 Jan 2000 00:00:00 GMT      内容的过期时间
+Pragma: no-cache                            内容不缓存
 Cache-Control: private, no-store, max-age=0, no-cache, must-revalidate,post-check=0, pre-check=0  内容不缓存
-X-Frame-Options: DENY   防止网页被frame,DENY：浏览器拒绝当前页面加载任何frame,
-Content-Encoding: gzip     返回内容采用gzip方式压缩
+X-Frame-Options: DENY       防止网页被frame,DENY：浏览器拒绝当前页面加载任何frame,
+Content-Encoding: gzip      返回内容采用gzip方式压缩
 Transfer-Encoding: chunked  表示输出的内容长度不确定
-Connection: keep-alive    保持长连接
-Keep-Alive: timeout=15    连接保持时间为15s
+Connection: keep-alive      保持长连接
+Keep-Alive: timeout=15      连接保持时间为15s
