@@ -1,0 +1,29 @@
+请求头：
+GET http://www.zhihu.com/ HTTP/1.1  #通过GET方法获得指定的URL,HTTP/1.1代表协议和协议的版本
+Host: www.zhihu.com                 #发送请求
+Proxy-Connection: keep-alive        #走的是代理，keep-alive 保持连接
+Cache-Control: max-age=0            #设置缓存，参数0，不缓存 
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 # 告诉WEB服务器自己接受什么介质类型
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36 #浏览器表明自己的身份（是哪种浏览器）
+DNT: 1
+Accept-Encoding: gzip, deflate, sdch     #浏览器申明自己接收的编码方法，通常指定压缩方法，是否支持压缩，支持什么压缩方法（gzip，deflate）
+Accept-Language: zh-CN,zh;q=0.8          #申明自己接收的语言
+Cookie: _ga=GA1.2.1504299805.1423378481; # 安全的数据
+
+响应头：
+HTTP/1.1 200 OK      # 状态码200正常
+Server: zhihu_nginx  # 服务器名
+Date: Sun, 19 Apr 2015 11:30:36 GMT    #响应时间
+Content-Type: text/html; charset=UTF-8 #响应的对象的类型
+Vary: Accept-Encoding                  #告诉缓存服务器可接收的编码和压缩方式
+Content-Security-Policy: default-src *; frame-src *.zhihu.com getpocket.com note.youdao.com; script-src *.zhihu.com *.google-analytics.com zhstatic.zhihu.com 'unsafe-eval'; style-src *.zhihu.com 'unsafe-inline' #安全策略
+Set-Cookie: r_c=1; Domain=zhihu.com; Path=/    # 设置cookie
+Expires: Fri, 02 Jan 2000 00:00:00 GMT         # 到期事件
+Vary: Accept-Encoding  #接受编码
+Pragma: no-cache       #内容不缓存
+Cache-Control: private, no-store, max-age=0, no-cache, must-revalidate, post-check=0, pre-check=0  #不缓存
+X-Frame-Options: DENY       #拒绝
+Content-Encoding: gzip      #内容编码为gzip
+Transfer-Encoding: chunked  #传输的内容需要分块
+Connection: keep-alive      #保持连接
+Keep-Alive: timeout=15      #保持连接时间为15s
