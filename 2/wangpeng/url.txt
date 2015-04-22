@@ -1,0 +1,82 @@
+请求头： 
+2 GET http://www.zhihu.com/ HTTP/1.1 
+像特定的资源发出请求
+
+3 Host: www.zhihu.com 
+指定请求资源的地址
+
+4 Proxy-Connection: keep-alive
+客户端到服务器端的连接持续有效 
+
+5 Cache-Control: max-age=0 
+ 客户端是否支持cache
+
+6 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+告诉WEB服务器自己接受什么介质类型
+ 
+7 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36 
+User-Agent头域的内容包含发出请求的用户信息 客户端的浏览器信息
+
+8 DNT: 1 
+禁止跟踪
+
+9 Accept-Encoding: gzip, deflate, sdch 
+浏览器支持的压缩类型
+
+10 Accept-Language: zh-CN,zh;q=0.8
+告诉服务器客户端支持哪些语言
+ 
+11 Cookie: _ga=GA1.2.1504299805.1423378481; 
+客户机通过这个头可以向服务器带数据
+
+ 
+13 响应头： 
+14 HTTP/1.1 200 OK 
+表示当前协议为Http 1.1 200 表示成功
+
+15 Server: zhihu_nginx 
+服务器通过这个头，告诉浏览器服务器的类型
+
+16 Date: Sun, 19 Apr 2015 11:30:36 GMT 
+当前的时间
+
+17 Content-Type: text/html; charset=UTF-8 
+服务器通过这个头，告诉浏览器回送数据的类型
+
+18 Vary: Accept-Encoding 
+意思是说squid要把客户端传来的某个头区别对待
+
+19 Content-Security-Policy: default-src *; frame-src *.zhihu.com getpocket.com note.youdao.com; script-src *.zhihu.com *.google-analytics.com zhstatic.zhihu.com 'unsafe-eval'; style-src *.zhihu.com 'unsafe-inline' 
+这个规范与内容安全有关，主要是用来定义页面可以加载哪些资源，减少XSS的发生。
+
+20 Set-Cookie: r_c=1; Domain=zhihu.com; Path=/ 
+设置和页面关联的Cookie
+
+21 Expires: Fri, 02 Jan 2000 00:00:00 GMT
+服务器通过这个头，告诉浏览器把回送的资源缓存多长时间，-1或0，则是不缓存
+ 
+22 Vary: Accept-Encoding
+意思是说squid要把客户端传来的某个头区别对待
+ 
+23 Pragma: no-cache 
+控制浏览器不要缓存数据
+
+24 Cache-Control: private, no-store, max-age=0, no-cache, must-revalidate, post-check=0, pre-check=0 
+控制浏览器不要缓存数据
+
+25 X-Frame-Options: DENY 
+浏览器拒绝当前页面加载任何Frame页面 
+
+
+26 Content-Encoding: gzip 
+服务器通过这个头，数据的压缩格式
+
+27 Transfer-Encoding: chunked 
+服务器通过这个头，告诉浏览器数据的传送格式
+
+28 Connection: keep-alive 
+服务器端响应客户端的连接持续有效
+
+29 Keep-Alive: timeout=15 
+持续有效时间
+
