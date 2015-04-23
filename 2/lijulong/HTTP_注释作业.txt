@@ -1,6 +1,6 @@
-请求头：
-GET http://www.zhihu.com/ HTTP/1.1
-Host: www.zhihu.com
+﻿请求头：
+GET http://www.zhihu.com/ HTTP/1.1 get请求，请求地址，heet协议版本
+Host: www.zhihu.com   请求的域名，即请求接受方
 Proxy-Connection: keep-alive
 Cache-Control: max-age=0
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
