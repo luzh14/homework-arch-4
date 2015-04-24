@@ -1,7 +1,7 @@
 http 请求响应解注释
 
 请求头：
-GET http://www.zhihu.com/ HTTP/1.1 ＃ GET:请求时歌GET请求， http://xxx: 请求的目录, HTTP/1.1: 使用的http版本
+GET http://www.zhihu.com/ HTTP/1.1 ＃ GET:请求使用GET请求， http://xxx: 请求的目录, HTTP/1.1: 使用的http版本
 
 Host: www.zhihu.com  ＃ host: 指定请求的主机
 
