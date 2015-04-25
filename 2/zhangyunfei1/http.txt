@@ -6,13 +6,9 @@ Proxy-Connection: keep-alive 表示使用代理，代理长连接
 Cache-Control: max-age=0 缓存控制选项，max-age 表示缓存时间为0，不缓存。
 Accept:
 text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
-告诉服务器浏览器支持的类型，和各种
-
-类型文件的受欢迎程度。
+告诉服务器浏览器支持的类型，和各种类型文件的受欢迎程度。
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36
-(KHTML, like Gecko) 客户端类型
-
-Chrome/42.0.2311.90 Safari/537.36
+(KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36 客户端类型
 DNT: 1 表示禁止追踪
 Accept-Encoding: gzip, deflate, sdch  告诉服务端浏览器支持的压缩格式
 Accept-Language: zh-CN,zh;q=0.8       告诉服务器客户端支持的语言
@@ -28,9 +24,7 @@ Content-Security-Policy: default-src *; frame-src *.zhihu.com getpocket.com
 note.youdao.com; script-src *.zhihu.com 
 
 *.google-analytics.com zhstatic.zhihu.com 'unsafe-eval'; style-src *.zhihu.com
-'unsafe-inline' 这个规范与内容安全有关
-
-，主要是用来定义页面可以加载哪些资源，减少XSS的发生。
+'unsafe-inline' 这个规范与内容安全有关，主要是用来定义页面可以加载哪些资源，减少XSS的发生。
 Set-Cookie: r_c=1; Domain=zhihu.com; Path=/
 设置cookie，cookie被发送到*.zhihu.com 的服务器上，在/下触发cookie的传送
 Expires: Fri, 02 Jan 2000 00:00:00 GMT 文件的过期时间
