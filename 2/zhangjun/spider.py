@@ -26,7 +26,9 @@ class get_icon:
             req = urllib2.Request(x, headers=self.headers)
             html = urllib2.urlopen(req).read()
             m = re.findall(r'http://img3.douban.com/icon/\w\d+-\d.jpg',html)
-            if m:icon_list.append(m[0])
+            if m:
+                for x in m:
+                    icon_list.append(m[0])
             if num == len(icon_list):break
         return icon_list
 
