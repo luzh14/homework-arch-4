@@ -5,10 +5,11 @@ __author__ = 'luke'
 from urllib2 import Request, urlopen, URLError, HTTPError
 import urllib
 import re
-def get_head_pic():
+import os
+def get_pics():
     data = {}
     data['cat']=1005
-    data['q']='妹子'
+    data['q']='逗逼'
     print data
     url_values = urllib.urlencode(data)
     url = "http://www.douban.com/search"
@@ -26,10 +27,26 @@ def get_head_pic():
         # everything is fine
     else:
         print 'No exception was raised.'
-    html_result=response.read().decode("utf-8")
-    print  html_result
-    pattern=re.compile(r'\s*<img\ssrc="(.*)"\salt="(.*)">')
-    match1=pattern.match(html_result)
-    print match1.group()
+    html_result=response.read()
+    #print  html_result
+    pic_pattern=re.compile(r'\s*<img\ssrc="(.*)"\salt="(.*)">')
+    url_list=re.findall(pic_pattern,html_result)
+    return url_list
 
-get_head_pic()
+def save_pic(pic_list):
+    path=r'./temp/'
+
+    for pic in pic_list:
+        name=pic[1].decode("utf-8")
+        url=pic[0]
+        file_name=name+'.jpg'   #文件名，包含文件格式
+        dest_dir=os.path.join(path,file_name)
+        try:
+            urllib.urlretrieve(url , dest_dir)
+        except:
+            print '\tError retrieving the URL:', dest_dir
+
+
+if __name__ == "__main__":
+    pic_list=get_pics()
+    save_pic(pic_list)
