@@ -6,7 +6,8 @@ def GetHtml(url):
 	content = html.read()
 	return content         
 def GetImgs(content):
-	reg = r'http://pic[0-9].*.jpg'
+	#reg = r'http://pic[0-9].*.jpg'
+	reg = r'src="(.*\.jpg)"'
 	compile = re.compile(reg)
 	imgs=re.findall(compile,content)
 	num=1
