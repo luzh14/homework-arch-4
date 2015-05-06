@@ -19,6 +19,7 @@ def GetImgs():
         #print content
         #sys.exit()
         imgs = re.findall(r'<img class="pil" src="(.*)" alt="(.*)"',content)
+        #<img class="pil" src="http://img3.douban.com/icon/u56865303-6.jpg" alt="情人若寂寥"> 正则匹配的图片
         #print imgs
         #sys.exit()
         for img in imgs:
