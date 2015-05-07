@@ -1,0 +1,89 @@
+请求头：
+GET http://www.zhihu.com/ HTTP/1.1
+GET HTTP请求的方法 包括GET，HEAD, PUT, POST, OPTIONS, DELETE 方法
+http://www.zhihu.com/: 请求的URL
+HTTP/1.1  请求的协议版本
+==
+Host: www.zhihu.com
+接受请求的host与端口
+==
+Proxy-Connection: keep-alive
+与代理keep-alive
+==
+Cache-Control: max-age=0
+请求内容不能是cache
+==
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+告诉服务器自己能接受的媒体类型
+==
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36
+告诉服务器自己的浏览器名称
+==
+DNT: 1
+do not track  IE 10支持
+==
+Accept-Encoding: gzip, deflate, sdch
+告诉服务器能发送到编码方式
+gzip
+sdch google的一种压缩算法，对一个网站的页面共同部分进行压缩
+deflate 
+==
+Accept-Language: zh-CN,zh;q=0.8
+告诉服务器可以发送到语言
+q
+==
+Cookie: _ga=GA1.2.1504299805.1423378481;
+本地cookie信息
+==
+
+响应头：
+HTTP/1.1 200 OK
+Server: zhihu_nginx
+web服务器软件的名字
+==
+Date: Sun, 19 Apr 2015 11:30:36 GMT
+服务器响应时间
+==
+Content-Type: text/html; charset=UTF-8
+页面类型是html，编码utf-8
+==
+Vary: Accept-Encoding
+缓存压缩与非压缩两种版本的文档，以解决个别浏览器不支持压缩
+==
+Content-Security-Policy: default-src *; frame-src *.zhihu.com getpocket.com note.youdao.com; script-src *.zhihu.com *.google-analytics.com zhstatic.zhihu.com 'unsafe-eval'; style-src *.zhihu.com 'unsafe-inline'
+可信内容的安全策略
+==
+Set-Cookie: r_c=1; Domain=zhihu.com; Path=/
+设置用户cookie
+Path 访问跟即设置cookie，比较灵活的cookie设置办法
+Domain 即向这个域名发送cookie信息
+==
+Expires: Fri, 02 Jan 2000 00:00:00 GMT
+文档的过期时间
+==
+Vary: Accept-Encoding
+缓存压缩与非压缩两种版本的文档，以解决个别浏览器不支持压缩
+==
+Pragma: no-cache
+表示不是cache内容
+==
+Cache-Control: private, no-store, max-age=0, no-cache, must-revalidate, post-check=0, pre-check=0
+private： 
+Cache-Control: private
+no-cache: 
+都是跟cache有关，跟浏览的方式有关， 比如打开新窗口，地址栏回车，刷新， 回退按钮操作等
+==
+X-Frame-Options: DENY
+浏览器拒绝当前页面被Frame
+Content-Encoding: gzip
+文档的编码方式
+==
+Transfer-Encoding: chunked
+分块传输长度无法估计
+==
+Connection: keep-alive
+连接保持
+==
+Keep-Alive: timeout=15
+连接超时时间设置
+==
