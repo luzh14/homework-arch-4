@@ -1,4 +1,5 @@
-
+#!/usr/bin/env python
+#coding=utf-8
 from optparse import OptionParser
 
 import sys,os,urllib,urllib2,json,re
