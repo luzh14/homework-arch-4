@@ -15,7 +15,7 @@ import cookielib, urllib2,urllib
 import os,re,sys
 def login():
     headers={'User-Agent':'Mozilla/5.0 (Windows;U;Windows NT 5.1;zh-CN;rv:1.9.2.9)Gecko/20100824 Firefox/3.6.9'}
-    values = {'form_email':'787696331@qq.com','form_password':'douban2014','remember':1,'source':'simple','redir':'http://www.douban.com'}
+    values = {'form_email':'******@***.com','form_password':'********','remember':1,'source':'simple','redir':'http://www.douban.com'}
     loginUrl = 'https://www.douban.com/accounts/login'
     data = urllib.urlencode(values)
     cookiejar = cookielib.CookieJar()
