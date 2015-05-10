@@ -1,0 +1,90 @@
+请求头：
+GET http://www.zhihu.com/ HTTP/1.1
+#以get方式访问知乎 使用http1.1协议
+
+Host: www.zhihu.com
+#指定请求的服务器的域名和端口号 默认80
+
+Proxy-Connection: keep-alive
+# 显式给浏览器设置代理后，浏览器会把请求头中的 Connection 替换为 Proxy-Connetion。这样，对于老旧的代理，它不认识这个 Header，会继续发给服务器，服务器也不认识，代理和服务器之间不会建立持久连接（不能正确处理 Connection 的都是 HTTP/1.0 代理），服务器不返回 Keep-Alive，代理和浏览器之间也不会建立持久连接。而对于新代理，它可以理解 Proxy-Connetion，会用 Connection 取代无意义的 Proxy-Connection，并将其发送给服务器，以收到预期的效果。
+
+Cache-Control: max-age=0
+#指定请求和响应遵循的缓存机制 
+max-age>0 时 直接从游览器缓存中 提取 
+max-age<=0 时 向server 发送http 请求确认 ,该资源是否有修改
+
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+#指定客户端能够接收的内容类型 q指定权重
+
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36
+#客户端使用的浏览器信息
+
+DNT: 1
+#do no tract  防止服务器追踪信息
+
+Accept-Encoding: gzip, deflate, sdch
+#浏览器申明自己接收的编码方法，通常指定压缩方法，是否支持压缩，支持什么压缩方法
+
+Accept-Language: zh-CN,zh;q=0.8
+#浏览器申明自己接收的语言
+语言跟字符集的区别：中文是语言，中文有多种字符集，比如big5，gb2312，gbk等等。
+
+Cookie: _ga=GA1.2.1504299805.1423378481;
+#HTTP请求发送时，会把保存在该请求域名下的所有cookie值一起发送给web服务器  获取用户信息
+
+响应头：
+HTTP/1.1 200 OK
+http协议1.1  状态码200
+
+Server: zhihu_nginx
+web服务器版本及名称
+
+Date: Sun, 19 Apr 2015 11:30:36 GMT
+web服务器返回的时间
+
+Content-Type: text/html; charset=UTF-8
+WEB 服务器告诉浏览器自己响应的对象的类型
+
+Vary: Accept-Encoding
+告诉下游代理是使用缓存响应还是从原始服务器请求
+
+Content-Security-Policy: default-src *; frame-src *.zhihu.com getpocket.com note.youdao.com; script-src *.zhihu.com *.google-analytics.com zhstatic.zhihu.com 'unsafe-eval'; style-src *.zhihu.com 'unsafe-inline'
+#防止xss攻击
+
+Set-Cookie: r_c=1; Domain=zhihu.com; Path=/
+设置Http Cookie
+
+Expires: Fri, 02 Jan 2000 00:00:00 GMT
+WEB服务器表明该实体将在什么时候过期，对于过期了的对象，只有在跟WEB服务器验证了其有效性后，才能用来响应客户请求。
+
+Vary: Accept-Encoding
+告诉下游代理是使用缓存响应还是从原始服务器请求
+
+Pragma: no-cache
+主要使用 Pramga: no-cache，相当于 Cache-Control： no-cache。
+
+Cache-Control: private, no-store, max-age=0, no-cache, must-revalidate, post-check=0, pre-check=0
+请求：no-cache（不要缓存的实体，要求现在从WEB服务器去取）
+max-age：（只接受 Age 值小于 max-age 值，并且没有过期的对象）
+max-stale：（可以接受过去的对象，但是过期时间必须小于 max-stale 值）
+min-fresh：（接受其新鲜生命期大于其当前 Age 跟 min-fresh 值之和的缓存对象）
+响应：public(可以用 Cached 内容回应任何用户)
+private（只能用缓存内容回应先前请求该内容的那个用户）
+no-cache（可以缓存，但是只有在跟WEB服务器验证了其有效后，才能返回给客户端）
+max-age：（本响应包含的对象的过期时间）
+ALL: no-store（不允许缓存）
+
+X-Frame-Options: DENY
+防止点击劫持(Clickjacking)的方法
+
+Content-Encoding: gzip
+web服务器支持的返回内容压缩编码类型。
+
+Transfer-Encoding: chunked
+文件传输编码
+
+Connection: keep-alive
+表示是否需要持久连接。（HTTP 1.1默认进行持久连接）
+
+Keep-Alive: timeout=15
+如果浏览器请求保持连接，则该头部表明希望 WEB 服务器保持连接多长时间（秒）

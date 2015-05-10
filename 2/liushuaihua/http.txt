@@ -1,0 +1,61 @@
+http 请求响应解注释
+
+请求头：
+GET http://www.zhihu.com/ HTTP/1.1 ＃ GET:请求使用GET请求， http://xxx: 请求的目录, HTTP/1.1: 使用的http版本
+
+Host: www.zhihu.com  ＃ host: 指定请求的主机
+
+Proxy-Connection: keep-alive  ＃ 告诉代理服务器保持链接
+
+Cache-Control: max-age=0   ＃ 指缓存机制, max-age: 声明过期时间，0为不缓存
+
+＃ Accept: 浏览器支持的MIME 类型 text／html: 表示html文档 application/xhtml+xml: xhtml文档
+＃ application/xml: xml文档, q: 表示权重，mage/webp： webp格式图片, */*: 表示任何类型  
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+
+# User-Agent: 表明自己浏览器身份 如 Chrome Mozilla等
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36
+
+DNT: 1  ＃ DNT: DO NOT TRACK的缩写，要求服务器程序不要跟踪记录用户信息。DNT: 1 (开启DNT) DNT: 0 (关闭DNT)
+
+Accept-Encoding: gzip, deflate, sdch  ＃ Accept-Encoding: 告诉服务器采用的压缩方法
+
+Accept-Language: zh-CN,zh;q=0.8  ＃ Accept-Language: 浏览器支持的语言，中文简体和中文，优先支持中文，q是权重的意思，zh-CN权重是1，zh权重是0.8
+
+Cookie: _ga=GA1.2.1504299805.1423378481;  ＃ Cookie: 发送给服务器的Cookie
+
+响应头：
+HTTP/1.1 200 OK  ＃ 服务器端响应GET请求 200 表示成功
+
+Server: zhihu_nginx  ＃ Server: 处理请求的软件
+
+Date: Sun, 19 Apr 2015 11:30:36 GMT  ＃ Date: 消息发送时间使用GMT标准时间
+
+Content-Type: text/html; charset=UTF-8 ＃ Content-Type 服务器告诉浏览器自己响应的对象的类型是 text／html charset: 表示采用的编码方式是UTF-8
+Vary: Accept-Encoding # 告诉代理服务器缓存两种版本的资源：压缩和非压缩
+
+# CSP: 定义页面黑衣加载哪些资源 default-src: 定义所有类型 script-src: 定义定义针对JavaScript的加载策略 style-src: 定义针对CSS的加载策略
+Content-Security-Policy: default-src *; frame-src *.zhihu.com getpocket.com note.youdao.com; script-src *.zhihu.com *.google-analytics.com zhstatic.zhihu.com 'unsafe-eval'; style-src *.zhihu.com 'unsafe-inline'
+
+Set-Cookie: r_c=1; Domain=zhihu.com; Path=/ # Set-Cookie: 向客户端发送Cookie
+
+Expires: Fri, 02 Jan 2000 00:00:00 GMT  # Expires: 表示存在时间，允许客户端在这个时间之前不去检查（发请求），等同max-age的效果。
+
+Vary: Accept-Encoding
+
+Pragma: no-cache # Pragma: 跟Cache-Control: no-cache相同，Pragma: no-cache兼容http 1.0 Cache-Control: no-cache是会被缓存的，只不过每次在向客户端提供响应数据时，缓存都要向服务器评估缓存响应的有效性。
+
+# Cache-Control: 缓存控制 private: 仅体现在响应头，通知浏览器只针对单个用户缓存响应
+# no-store: 告诉浏览器任何情况下都不要被缓存  must-revalidate: 控制客户端每次使用缓存前必须先校验， max－age: 缓存过期时间
+# post-check 和 pre-check: 控制本地缓存，如果缓存时间,超过post-check的值,就要保证下一次请求该资源,去要验证是否更新过了.而pre-check则是超过了，就马上给个新的. 
+Cache-Control: private, no-store, max-age=0, no-cache, must-revalidate, post-check=0, pre-check=0
+
+X-Frame-Options: DENY  ＃ X-Frame-Options: 给浏览器指示允许一个页面可否在 <frame>, <iframe> 或者 <object> 中展现的标记. DENY: 表示该页面不允许在 frame 中展示，即便是在相同域名的页面中嵌套也不允许。
+
+Content-Encoding: gzip # Content-Encoding: 告知服务器采用何种压缩方式
+
+Transfer-Encoding: chunked # Transfer-Encoding: 数据分块传输 chunked传输即分块传输：将响应主体分成若干块，并在每一块前面加上该块数据的长度以及回车换行，这样Recipient（如浏览器）就可以根据这个长度值正确接收每一块数据，最后以一个0长度的分块作为消息体的结束标志。采用该传输方式Sender在开始传输响应内容到Recipient前不需要知道内容的长度。
+
+Connection: keep-alive # 告诉客户端保持链接
+
+Keep-Alive: timeout=15 # 当个链接的超时保持时间

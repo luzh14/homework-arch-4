@@ -1,0 +1,38 @@
+请求头： 客户端浏览器发送的请求信息头部
+GET http://www.zhihu.com/ HTTP/1.1 方法：GET， url 是http://www.zhihu.com/
+HTTP/1.1 使用的http协议版本是http1.1版本
+Host: www.zhihu.com 主机头，请求的服务器域名
+Proxy-Connection: keep-alive 表示使用代理，代理长连接
+Cache-Control: max-age=0 缓存控制选项，max-age 表示缓存时间为0，不缓存。
+Accept:
+text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+告诉服务器浏览器支持的类型，和各种类型文件的受欢迎程度。
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36
+(KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36 客户端类型
+DNT: 1 表示禁止追踪
+Accept-Encoding: gzip, deflate, sdch  告诉服务端浏览器支持的压缩格式
+Accept-Language: zh-CN,zh;q=0.8       告诉服务器客户端支持的语言
+Cookie: _ga=GA1.2.1504299805.1423378481;  把本地的cookie发送给浏览器
+
+响应头：
+HTTP/1.1 200 OK 200 表示成功返回信息
+Server: zhihu_nginx 表示响应服务器的信息
+Date: Sun, 19 Apr 2015 11:30:36 GMT 响应时间，时间格式为格林威治时间
+Content-Type: text/html; charset=UTF-8 返回内容的类型和编码格式
+Vary: Accept-Encoding    告诉代理，返回内容为压缩的方式
+Content-Security-Policy: default-src *; frame-src *.zhihu.com getpocket.com
+note.youdao.com; script-src *.zhihu.com 
+
+*.google-analytics.com zhstatic.zhihu.com 'unsafe-eval'; style-src *.zhihu.com
+'unsafe-inline' 这个规范与内容安全有关，主要是用来定义页面可以加载哪些资源，减少XSS的发生。
+Set-Cookie: r_c=1; Domain=zhihu.com; Path=/
+设置cookie，cookie被发送到*.zhihu.com 的服务器上，在/下触发cookie的传送
+Expires: Fri, 02 Jan 2000 00:00:00 GMT 文件的过期时间
+Pragma: no-cache 内容不缓存
+Cache-Control: private, no-store, max-age=0, no-cache, must-revalidate,
+post-check=0, pre-check=0 内容不缓存
+X-Frame-Options: DENY  浏览器拒绝当前页面加载任何Frame页面
+Content-Encoding: gzip 压缩类型gzip
+Transfer-Encoding: chunked  表示输出的内容长度不能确定
+Connection: keep-alive 使用长连接
+Keep-Alive: timeout=15 长连接超时时间

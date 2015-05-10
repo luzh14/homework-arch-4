@@ -1,0 +1,55 @@
+请求头：
+GET http://www.zhihu.com/ HTTP/1.1  
+#请求格式: 请求方法开头，以空格分隔，跟着请求的URI和协议版本
+#请求方法GET, 浏览器采用GET方法向服务器获取资源；请求HTTP URL: http://www.zhihu.com/ 因为此例host后面没有给出PATH，所以请求时必须浏览器自动加上"/"; HTTP版本为1.1 最后有CRLF(\r\n)
+Host: www.zhihu.com
+#请求Host: www.zhihu.com(CRLF)
+Proxy-Connection: keep-alive
+#浏览器开启了代理功能, 所以请求头变成了http://www.zhihu.com/, 否则应该是'GET / HTTP/1.1'; Proxy-Connection 也替换了Connection.
+#为了避开老的代理，新的代理会翻译成connection
+Cache-Control: max-age=0
+#控制网页缓存的，max-age=0可以等价于no-cache, 意思是每次访问此网页都会请求服务器，而不是访问本地缓存304, 如何max-age=10 就是访问此网页10秒内
+#再次访问不会去请求服务器而是访问本地缓存
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+#表示浏览器支持的MIME类型，媒体类型和内容类型，'/'前是类型，'/'后是子类型，就是大范围和范围中精确类型, */*代表任意类型，q代表优先级
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36
+#客户端类型（浏览器）
+DNT: 1
+#是浏览器要支持，Do Not Track 禁止追踪，用户选择了这个字段就免于被第三方网站追踪网络痕迹。1代表用户不想被第三方网站追踪，0代表接收，null代表用户
+#无所谓，
+Accept-Encoding: gzip, deflate, sdch
+#客户端（浏览器）发给服务器，声明浏览器支持的编码类型, sdch是一种新的压缩算法, 通过字典压缩算法对各个也没相同的内容进行压缩，减少相同的内容重复
+#传输
+Accept-Language: zh-CN,zh;q=0.8
+#浏览器支持的语言，优先支持简体中文，q是权重系数范围0=<q<=1
+Cookie: _ga=GA1.2.1504299805.1423378481;
+
+响应头：
+HTTP/1.1 200 OK
+Server: zhihu_nginx
+#包含了服务器端用来处理请求的软件信息。就是与User-Agent请求头相对应，也是可以伪造的
+Date: Sun, 19 Apr 2015 11:30:36 GMT
+#消息产生的时间
+Content-Type: text/html; charset=UTF-8
+#这是返回消息中非常重要的内容，表示返回的文档属于什么类型的MIME类型，这样就会通知浏览器如何显示返回的消息内容
+Vary: Accept-Encoding
+#告诉代理服务器缓存两种版本的资源：压缩和非压缩，有助于避免一些公共代理不能正确的检测Content-Encoding
+Content-Security-Policy: default-src *; frame-src *.zhihu.com getpocket.com note.youdao.com; script-src *.zhihu.com *.google-analytics.com zhstatic.zhihu.com 'unsafe-eval'; style-src *.zhihu.com 'unsafe-inline'
+#与内容安全是有关的，定义页面可以加载哪些资源，减少XSS
+Set-Cookie: r_c=1; Domain=zhihu.com; Path=/
+#Cookie和Set-Cookie是2个HTTP头部和cookie相关的参数，Set-cookie是用于服务器发送给客户端的，包含在响应头部，用于客户端创建一个cookie；Cookie头由客户端（浏览器）发送的，包含在HTTP请求头部。没有指定expires,所以当回话关闭Cookie就失效
+Expires: Fri, 02 Jan 2000 00:00:00 GMT
+#HTTP控制缓存的基本手段, 时间必须是GMT，而不是本地时间. 还是Cache-Control可以控制更多点
+Vary: Accept-Encoding
+Pragma: no-cache
+#和Cache-Control一样，只是为了兼容http/1.0, 而Cache-Control兼容1.1
+Cache-Control: private, no-store, max-age=0, no-cache, must-revalidate, post-check=0, pre-check=0
+X-Frame-Options: DENY
+#防止网页被Frame
+Content-Encoding: gzip
+#WEB服务器表明自己使用了gzip压缩方法
+Transfer-Encoding: chunked
+#分块传输，输出的内容长度不能确定，不用把压缩后的数据写到一个很大字节数组里，得到Content-Length.不用申请很大字节数组，可以一块一块输出，占用资源更少
+Connection: keep-alive
+Keep-Alive: timeout=15
+#回话超时时间
