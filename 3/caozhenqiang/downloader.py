@@ -24,7 +24,6 @@ def get_args():
     else:
         print usage
         sys.exit(2)
-        
     return url, thread_num
 
 def get_size(url):
@@ -41,8 +40,6 @@ def get_thread_list(size,th_num):
     for i in xrange(len(L)-1):
         lst.append([L[i],L[i+1]-1])
     lst.append([L[-1],size-1])
-        #lst.append("%d-%d" % (L[i],L[i+1]-1))
-    #lst.append("%d-%d" % (L[-1],size-1))
     return lst
     
 def down_file(url,filename,span_list):
@@ -65,8 +62,7 @@ def combine_file(filename, tmp_f_list):
             os.remove(i)
             print "moved", i
         except:
-            print "xxxx" 
-
+            print "file not exists",i
     filehandle.close()
 
 def main():
@@ -75,19 +71,20 @@ def main():
         print "not available args."
         sys.exit(1)
     #url='http://dldir1.qq.com/qqfile/qq/QQ7.1/14522/QQ7.1.exe'
-    filename=url.split('/')[-1] #'file.download'
+    filename=url.split('/')[-1] #QQ7.1.exe
     tmp_filename='.'+filename
     tmp_f_list = [ tmp_filename+str(x) for x in xrange(thread_num)]
+
     size = get_size(url)
     span_list = get_thread_list(size, thread_num)
     for i in xrange(thread_num):
         t = threading.Thread(target=down_file,args=(url,tmp_f_list[i],span_list[i]),)
         t.start()
-    print "current has %d threads" % (threading.activeCount() - 1)
+    print "current has %d child_threads" % (threading.activeCount() - 1)
     while threading.activeCount(): 
         if threading.activeCount() == 1:
             combine_file(filename, tmp_f_list)
-            print "current has %d threads" % (threading.activeCount() - 1)
+            print "current has %d child_threads" % (threading.activeCount() - 1)
             break
         else:
             pass
