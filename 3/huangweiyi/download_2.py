@@ -17,8 +17,14 @@ class FileMultiDownload(object):
         self.url = url
         if not filename:
             self.filename = url.split("/")[-1]
+        else:
+            self.filename = filename
+        
         if not threadnum:
             self.threadnum = 10
+        else:
+            self.threadnum = threadnum
+
         self.filesize = self.getFileSize()
         self.lock = Lock()
         self.fd = open(self.filename, 'w')
