@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import urllib2
-import os,time,sys
+import os,sys
 import sys, getopt
 import threading
 
@@ -11,13 +11,10 @@ def get_args():
     opts, args = getopt.getopt(sys.argv[1:], "hu:n:", ["help", "url=", "thread_num="])
     if opts:
         for op, value in opts:
-            if op == '-u' or op == '--url':
+            if op == '-u': 
                 url = value
-            elif op == '-n' or op == '--thread_num':
+            elif op == '-n': 
                 thread_num = int(value)
-            elif op == '-h':
-                print usage 
-                sys.exit(0)
             else:
                 print usage
                 sys.exit(1)
@@ -34,60 +31,35 @@ def get_size(url):
     return file_size
 
 def get_thread_list(size,th_num):
-    lst = []
     step = size / th_num
-    L = [ step * i for i in xrange(0,th_num) ]
-    for i in xrange(len(L)-1):
-        lst.append([L[i],L[i+1]-1])
-    lst.append([L[-1],size-1])
+    lst=[[step * i, step * (i + 1) - 1] for i in xrange(0,th_num-1)]
+    lst.append([step*(i+1) - 1, size])
     return lst
     
-def down_file(url,filename,span_list):
+def down_file(url,fd,Range_list):
     response = urllib2.Request(url) 
-#   response.add_header('Range', 'bytes=%d-%d' % (span_list[0],span_list[1]))
-    response.add_header('Range','bytes={0[0]}-{0[1]}'.format(span_list))
+#   response.add_header('Range', 'bytes=%d-%d' % (Range_list[0],Range_list[1]))
+    response.add_header('Range','bytes={0[0]}-{0[1]}'.format(Range_list))
     r = urllib2.urlopen(response)
     context = r.read()
-    f = open(filename,'wb')
+    f = fd
+    print f
+    f.seek(Range_list[0])
     f.write(context)
-    f.close()
-
-def combine_file(filename, tmp_f_list):
-    filehandle = open(filename, 'wb+')
-    for i in tmp_f_list:
-        f = open(i, 'rb')
-        filehandle.write(f.read())
-        f.close()
-        try:
-            os.remove(i)
-            print "moved", i
-        except:
-            print "file not exists",i
-    filehandle.close()
 
 def main():
     url, thread_num = get_args() 
-    if not url or not thread_num:
-        print "not available args."
-        sys.exit(1)
-    #url='http://dldir1.qq.com/qqfile/qq/QQ7.1/14522/QQ7.1.exe'
-    filename=url.split('/')[-1] #QQ7.1.exe
-    tmp_filename='.'+filename
-    tmp_f_list = [ tmp_filename+str(x) for x in xrange(thread_num)]
+    filename=url.split('/')[-1] #'file.download'
+    filesize = get_size(url)
+    Range_list = get_thread_list(filesize, thread_num)
 
-    size = get_size(url)
-    span_list = get_thread_list(size, thread_num)
+    fd = []
     for i in xrange(thread_num):
-        t = threading.Thread(target=down_file,args=(url,tmp_f_list[i],span_list[i]),)
+        fd.append(open(filename,'w+'))
+        t = threading.Thread(target=down_file,args=(url,fd.pop(),Range_list[i]),)
+        print "Range_list %d: " % i , Range_list[i]
         t.start()
-    print "current has %d child_threads" % (threading.activeCount() - 1)
-    while threading.activeCount(): 
-        if threading.activeCount() == 1:
-            combine_file(filename, tmp_f_list)
-            print "current has %d child_threads" % (threading.activeCount() - 1)
-            break
-        else:
-            pass
+    print "Currently, there are %d child threads" % (threading.activeCount() - 1)
 
 if __name__ == '__main__':
     main()
