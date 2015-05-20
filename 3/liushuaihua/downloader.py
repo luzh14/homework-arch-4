@@ -19,26 +19,15 @@ class ThreadHttp(threading.Thread):
     
     def run(self):
         request = urllib2.Request(self.url)
-        rlock = threading.RLock()
-        with open(self.file_name, 'r+') as savefile:
-            # 使用HTTP Range进行下载分片
-            if not self.start_size == 0:
-                request.headers['Range'] = 'bytes=%s-%s' % (self.start_size+1, self.end_size)
-                files = urllib2.urlopen(request).read()
-                # 写入文件前加锁
-                rlock.acquire()
-                savefile.seek(self.start_size+1)
-                savefile.write(files)
-                rlock.release()
-            else:
-                request.headers['Range'] = 'bytes=%s-%s' % (0, self.end_size)
-                files = urllib2.urlopen(request).read()
-                rlock.acquire()
-                savefile.seek(0)
-                savefile.write(files)
-                rlock.release()
+        savefile =  open(self.file_name, 'r+')
+        # 使用HTTP Range进行下载分片
+        request.headers['Range'] = 'bytes=%s-%s' % (self.start_size, self.end_size)
+        files = urllib2.urlopen(request).read()
+        savefile.seek(self.start_size)
+        savefile.write(files)
+        savefile.close()
 
-class DwonRate(threading.Thread):
+class DownRate(threading.Thread):
     '''显示下载进度
     '''
     def __init__(self, size, file_name):
@@ -69,7 +58,11 @@ def downlaod(url, thread):
     
     # 根据进程数分片
     quotient, remainder = divmod(int(size), thread)
-    size_list = [(n, n+quotient) for n in xrange(0, size, quotient)]
+    size = size - remainder 
+    size_list = [(n+1, n+quotient) for n in xrange(0, size, quotient)]
+    size_list[0] = (0,size_list[0][1])
+    if remainder != 0:
+        size_list[-1] = (size_list[-1][0], size_list[-1][1]+remainder)    
    
     # 创建文件 检查文件是否存在
     file_name = url.split('/')[-1]
@@ -80,7 +73,7 @@ def downlaod(url, thread):
 
     # 添加线程
     down_list = []
-    down_list.append(DwonRate(size, file_name))
+    down_list.append(DownRate(size, file_name))
     for h_range in size_list:
         t = ThreadHttp(url, h_range[0], h_range[1], file_name)
         down_list.append(t)
