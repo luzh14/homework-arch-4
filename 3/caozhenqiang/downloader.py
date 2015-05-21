@@ -42,10 +42,10 @@ def down_file(url,fd,Range_list):
     response.add_header('Range','bytes={0[0]}-{0[1]}'.format(Range_list))
     r = urllib2.urlopen(response)
     context = r.read()
-    f = fd
-    print f
-    f.seek(Range_list[0])
-    f.write(context)
+    fd.seek(Range_list[0])
+    fd.write(context)
+    fd.close()
+    print fd
 
 def main():
     url, thread_num = get_args() 
