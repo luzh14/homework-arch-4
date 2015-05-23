@@ -27,8 +27,10 @@ class downloader(object):
     def __init__(self, p_url, p_num):
         self.url, self.num, = (p_url, p_num)
         self.name = self.url.split('/')[-1]
-
-        resp = urllib2.urlopen(self.url).info()
+        # Content-Length
+        req = urllib2.Request(self.url)
+        req.get_method = lambda: 'HEAD'
+        resp = urllib2.urlopen(req).headers
         self.total = int( resp['Content-Length'] )
         self.offset = int( self.total / self.num ) + 1
         print('\ninit:\n\tfile size: %d, offset: %d') % (self.total, self.offset)
@@ -44,7 +46,18 @@ class downloader(object):
                 ranges.append( (j, j + self.offset))
         return(ranges)
 
-    def thread_handler(self, p_start, p_end, p_fd):
+    def save_range(self, p_cont, p_from):
+        '''save ranges to file, for each thread'''
+        try:
+            fd = os.dup(self.fd.fileno())
+            fd_wr = os.fdopen(fd, 'w+')
+            fd_wr.seek(p_from)
+            fd_wr.write(p_cont)
+            fd_wr.close()
+        except Exception as e:
+            print(e.strerror)
+
+    def thread_handler(self, p_start, p_end):
         '''gen a thread to download from p_start to p_end'''
         req = urllib2.Request(self.url)
         req.add_header('Range', 'Bytes=' + str(p_start) + '-' + str(p_end) )
@@ -55,35 +68,29 @@ class downloader(object):
             sys.exit(2)
 
         # write file
-        cont = resp.read()
-        p_fd.seek(p_start)
-        p_fd.write(cont)
-        p_fd.flush()
+        self.save_range(resp.read(), p_start)
+
 
     def run(self):
         '''main func for this class for running downloader with multi-threading'''
+        self.fd = open(self.name, 'w+')
         thread_list = []
-        fd_list = []
         n = 0
         for item_range in self.gen_ranges():
             start, end = item_range
             print('thread %d - start: %s, end: %s') % (n, start, end)
-            fd_list.append( open(self.name, 'w+'))
-            thread = threading.Thread(target=self.thread_handler, args=(start, end, fd_list[n]))
+            thread = threading.Thread(target=self.thread_handler, args=(start, end))
             thread.start()
             thread_list.append(thread)
             n += 1
 
         for i in thread_list:
             i.join()
-        for i in fd_list:
-            i.close()
 
+        self.fd.close()
         print('file: %s download success!' % self.name )
 
 if __name__ == '__main__':
     url, num = check_argv()
-
     down = downloader(url, num)
     down.run()
-
