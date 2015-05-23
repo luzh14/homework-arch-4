@@ -3,34 +3,25 @@
 __author__ = 'luke'
 
 
-import urllib2
+import urllib.request
 import os
 from threading import Thread
 
-def GetFileSize(url, proxy=None):
-    """通过content-length头获取文件大小
-    url - 目标文件URL
-    proxy - 代理
-    """
-    opener = urllib2.build_opener()
-    if proxy:
-        if url.lower().startswith('https://'):
-            opener.add_handler(urllib2.ProxyHandler({'https' : proxy}))
-        else:
-            opener.add_handler(urllib2.ProxyHandler({'http' : proxy}))
-    request = urllib2.Request(url)
-    request.get_method = lambda: 'HEAD'
+def GetFileSize(url):
+
     try:
-        response = opener.open(request)
-        response.read()
-    except Exception, e:
-        print '%s %s' % (url, e)
+        request = urllib.request.urlopen(url)
+        request._method = 'HEAD'
+        meta=request.info()
+
+    except Exception as e:
+        print ('%s %s' % (url,e ))
     else:
-        return dict(response.headers).get('content-length', 0)
+        return meta.get_all('Content-Length')[0]
 
 def SpliteBlocks(totalsize, blocknumber):
     totalsize=int(totalsize)
-    blocksize = totalsize / blocknumber
+    blocksize = int(totalsize / blocknumber)
     ranges = []
     for i in range(0, blocknumber - 1):
         ranges.append((i * blocksize, i * blocksize + blocksize - 1))
@@ -61,30 +52,32 @@ class DownLoader(Thread):
         self.range = range
 
     def run(self):
-        req=urllib2.Request(self.url)
-        start_size=self.range[0]
-        end_size=self.range[1]
-        req.headers['Range'] = 'bytes=%d-%d' % (start_size, end_size)
-        f = urllib2.urlopen(req)
-        block=f.read(self)
-        fobj=open(self.filename,'wb')
-        fobj.write(block)
+        req=urllib.request.urlopen(self.url)
+        start_sign=int(self.range[0])
+        end_sign=int(self.range[1])
+        req.headers['Range'] = 'bytes=%d-%d' % (start_sign, end_sign)
+        fobj=open(self.filename,'wb+')
+        block_size=end_sign-start_sign+1
+        fobj.seek(start_sign)
+        fobj.write(req.read(block_size))
         fobj.close()
 
 
 if __name__ == '__main__':
     url='http://dldir1.qq.com/qqfile/qq/QQ7.1/14522/QQ7.1.exe'
     downloadFile='download.file'
-    blocks=5
+    blocks=7
     size = GetFileSize(url)
     ranges = SpliteBlocks(size, blocks)
     threadname = ["thread_%d" % i for i in range(0, blocks)]
     tmpFileList = ["tmpfile_%d" % i for i in range(0, blocks)]
     taskList=[]
     for i in range(blocks):
-        taskList.append(DownLoader(threadname[i],url,tmpFileList[i]),ranges[i])
+        task=DownLoader(threadname[i],url,downloadFile,ranges[i])
+        taskList.append(task)
     for t in taskList:
         t.start()
     for t in taskList:
         t.join()
-    CombineFile(downloadFile,tmpFileList)
+
+    #CombineFile(downloadFile,tmpFileList)
