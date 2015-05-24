@@ -31,9 +31,12 @@ def get_size(url):
     return file_size
 
 def get_thread_list(size,th_num):
-    step = size / th_num
-    lst=[[step * i, step * (i + 1) - 1] for i in xrange(0,th_num-1)]
-    lst.append([step*(i+1) - 1, size])
+    if th_num <= 1:
+        lst = [[0, size]]
+    else:
+        step = size / th_num
+        lst=[[step * i, step * (i + 1) - 1] for i in xrange(0,th_num)]
+        lst.append([step*(i+1) - 1, size])
     return lst
     
 def down_file(url,fd,Range_list):
@@ -45,7 +48,7 @@ def down_file(url,fd,Range_list):
     fd.seek(Range_list[0])
     fd.write(context)
     fd.close()
-    print fd
+#    print fd
 
 def main():
     url, thread_num = get_args() 
