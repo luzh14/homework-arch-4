@@ -5,6 +5,7 @@ import sys
 import urllib2
 url=sys.argv[1]
 thread_num=int(sys.argv[2])
+filename=url.split('/')[-1]
 
  
 
@@ -35,10 +36,10 @@ def setup():
     file_fd = []
     for part in Rangelist:
         part = '%s-%s' % part
-        file_fd.append(open('qq.exe','w+'))
+        file_fd.append(open(filename,'w+'))
         threads.append(threading.Thread(target=download,args=(part,file_fd.pop())))
     else:
-        file_fd.append(open('qq.exe','w+'))
+        file_fd.append(open(filename,'w+'))
         threads.append(threading.Thread(target=download,args=(str(last_size)+'-',file_fd.pop())))
 
     for t in threads:
