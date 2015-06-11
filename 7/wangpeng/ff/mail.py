@@ -2,11 +2,10 @@
 import smtplib,mimetypes
 from email.MIMEText import MIMEText
 
-def MailAlarm(subject_header,content):
+def MailAlarm(to_addr,subject_header,content):
     mail_server = 'mx1.qq.com'
     mail_server_port = 25
     from_addr = 'alarm@123q.com'
-    to_addr = '26295479@qq.com'
     from_header = 'From: %s\r\n' % (from_addr)
     to_header = 'To: %s\r\n\r\n' % (to_addr)
     m = MIMEText(content)
@@ -19,4 +18,4 @@ def MailAlarm(subject_header,content):
     s.quit()
 
 if __name__ == '__main__':
-        MailAlarm(subject_header,content)
+        MailAlarm(to_addr, subject_header, content)
