@@ -7,7 +7,7 @@ import select
 import time
 
 __all__ = ["nbNet", "sendData_mh"]
-DEBUG = False
+DEBUG = False 
 
 def dbgPrint(msg):
     if DEBUG:
@@ -25,45 +25,35 @@ def sendData_mh(sock_l, host_l, data, single_host_retry = 2):
         port = int(port)
         retry = 0
         while retry < single_host_retry:
-            print 'retry:',retry
             try:
                 if sock_l[0] == None:
                     sock_l[0] = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     sock_l[0].settimeout(5)
                     sock_l[0].connect((host, port))
-                    print "connecting %s:%s" % (host,port)
+                print "connecting %s:%s" % (host,port)
                 d = data
                 sock_l[0].sendall("%010d%s"%(len(d), d)) 
                 print "Here is the data which have been send:\n","%010d%s"%(len(d), d)
-                #try:
-                print sock_l[0]
-                print "waiting recv count"
-                count = sock_l[0].recv(10)
-                print "count",count
-                if not count:
-                    print "count",count
-                    raise Exception("recv error", "recv error")
-                count = int(count)
-                buf = sock_l[0].recv(count)
-                print buf
-                if buf[:2] == "OK":
-                    retry = 0
-                    done_flag = "OK"
-                    return done_flag
-                    #break
-                #except:
-                    #print("recv error", "recv error")
+                try:
+                    count = sock_l[0].recv(10)
+                    count = int(count)
+                    buf = sock_l[0].recv(count)
+                    print "buf recv",buf
+                    if buf[:2] == "OK":
+                        done_flag = "OK"
+                except (socket.error, ValueError), msg:
+                    print "socket.error of recv ", msg
+                    sock_l[0] = None
+                break
             except (socket.error, ValueError), msg:
                 print "socket.error value", msg.errno
-                print "Fail to connecting %s:%s" % (host,port)
                 sock_l[0].close()
                 sock_l[0] = None
                 retry += 1
         else:
-            print "out loop continue"
             continue
-        print "out loop break"
         break
+    return done_flag
 
 def sendData(sock_l, host, port, data):
     retry = 0 
@@ -181,11 +171,13 @@ class nbNet:
 
     def read(self, fd):
         """fd is fileno() of socket"""
+        time.sleep(0.1)
         try:
             sock_state = self.conn_state[fd]
             conn = sock_state.sock_obj
             if sock_state.need_read <= 0:
                 self.conn_state[fd].state = 'closing'
+                print "nbNet do closing 187"
                 self.state_machine(fd)
 
             one_read = conn.recv(sock_state.need_read)
@@ -214,7 +206,9 @@ class nbNet:
                 sock_state.state = "process"
                 self.process(fd)
         except (socket.error, ValueError), msg:
+            print msg
             self.conn_state[fd].state = 'closing'
+            print "nbNet do closing 217"
             if msg.errno == 11:
                 return
             # closing directly when error.
@@ -240,6 +234,7 @@ class nbNet:
                 self.epoll_sock.modify(fd, select.EPOLLIN)
         except socket.error, msg:
             sock_state.state = "closing"
+            print "nbNet do closing 243"
             dbgPrint(msg)
         self.state_machine(fd)
 
@@ -268,9 +263,11 @@ class nbNet:
                 if select.EPOLLHUP & events:
                     dbgPrint("EPOLLHUP")
                     sock_state.state = "closing"
+                    print "nbNet do closing 272"
                 elif select.EPOLLERR & events:
                     dbgPrint("EPOLLERR")
                     sock_state.state = "closing"
+                    print "nbNet do closing 276"
                 self.state_machine(fd)
 
     def state_machine(self, fd):

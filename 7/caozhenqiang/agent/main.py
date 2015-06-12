@@ -12,7 +12,8 @@ import sys, os
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from simpleNet.nbNetFramework import sendData_mh
 
-trans_l = ['localhost:50000']
+#trans_l = ['localhost:50000']
+trans_l = ['localhost:60000','localhost:50000']
 class porterThread (threading.Thread):
     def __init__(self, name, q, ql=None, interval=None):
         threading.Thread.__init__(self)
@@ -44,14 +45,23 @@ class porterThread (threading.Thread):
             
     def get_data(self):
         while 1:
-            print "get"
-            #self.queueLock.acquire()
+            print "get~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
             if not self.q.empty():
                 data = self.q.get()
-                #print data
-                sendData_mh(self.sock_l, trans_l, json.dumps(data))
-            #self.queueLock.release()
-            time.sleep(self.interval)
+                print data
+                while 1:
+                    ret = sendData_mh(self.sock_l, trans_l, json.dumps(data))
+                    print data
+                    print "Agent: trying to sendData_mh"
+                    if ret == "OK" :
+                        time.sleep(self.interval)
+                        print "Agent: sendData_mh successfully"
+                        break
+                    else:
+                        time.sleep(self.interval)
+                else:
+                    print "Agent: sendData_mh unsuccessfully"
+                    continue
 
 def startTh():
     q1 = Queue.Queue(10)

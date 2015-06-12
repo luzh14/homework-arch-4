@@ -27,11 +27,12 @@ def logic(d_in):
         hostIndex = monTables[ord(hostHash.digest()[-1]) % len(monTables)]
         sql = "insert into %s (host,mem_free,mem_usage,mem_total,load_avg,time) values ('%s',%d,%d,%d,'%s',%d)" %\
             (hostIndex,data['Host'],data['MemFree'],data['MemUsage'],data['MemTotal'],data['LoadAvg'], int(data['Time']))
-        print "insert OK" 
-        ret = c.execute(sql)
-    except mysql.IntegrityError:
-        pass
-    return('OK')
+        if c.execute(sql):
+            print "Insert done"
+            return('OK')
+    except mysql.IntegrityError,e:
+        print "Mysql Error %d: %s" % (e.args[0], e.args[1])
+        return('Not OK')
     
 if __name__ == '__main__':
     saverD = nbNet('0.0.0.0', 50001, logic)

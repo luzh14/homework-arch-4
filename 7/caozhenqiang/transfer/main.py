@@ -18,12 +18,11 @@ if __name__ == "__main__":
     def logic(d_in):
         #ret0 = sendFf(d_in, ff_l)
         ret = sendSaver(d_in, saver_l)
-        print "ret: ",ret
         if ret == "OK":
             print "SendSave: OK"
             return("OK")
         else:
-            return("ER")
+            return("Error")
     transD = nbNet('0.0.0.0', 50000, logic)
     transD.run()
 
