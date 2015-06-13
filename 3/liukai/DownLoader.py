@@ -3,21 +3,21 @@
 __author__ = 'luke'
 
 
-import urllib.request
+import urllib,urllib2
 import os
 from threading import Thread
 
 def GetFileSize(url):
 
     try:
-        request = urllib.request.urlopen(url)
+        request = urllib2.urlopen(url)
         request._method = 'HEAD'
         meta=request.info()
 
     except Exception as e:
         print ('%s %s' % (url,e ))
     else:
-        return meta.get_all('Content-Length')[0]
+        return meta.get_headers('Content-Length')[0]
 
 def SpliteBlocks(totalsize, blocknumber):
     totalsize=int(totalsize)
@@ -52,7 +52,7 @@ class DownLoader(Thread):
         self.range = range
 
     def run(self):
-        req=urllib.request.urlopen(self.url)
+        req=urllib2.urlopen(self.url)
         start_sign=int(self.range[0])
         end_sign=int(self.range[1])
         req.headers['Range'] = 'bytes=%d-%d' % (start_sign, end_sign)
