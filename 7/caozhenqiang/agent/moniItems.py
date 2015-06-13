@@ -54,8 +54,8 @@ class mon:
         0x8915, # SIOCGIFADDR 
         struct.pack('256s', ifname[:15]) 
         )[20:24])  
-    def getIpPrivate(self):
-        return self.GetIp('eth1')
+    #def getIpPrivate(self):
+        #return self.GetIp('eth1')
     def getIpPublic(self):
         return self.GetIp('eth0')
         

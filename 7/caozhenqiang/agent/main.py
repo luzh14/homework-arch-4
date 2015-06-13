@@ -51,7 +51,6 @@ class porterThread (threading.Thread):
                 print data
                 while 1:
                     ret = sendData_mh(self.sock_l, trans_l, json.dumps(data))
-                    print data
                     print "Agent: trying to sendData_mh"
                     if ret == "OK" :
                         time.sleep(self.interval)

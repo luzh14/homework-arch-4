@@ -32,7 +32,7 @@ def logic(d_in):
             return('OK')
     except mysql.IntegrityError,e:
         print "Mysql Error %d: %s" % (e.args[0], e.args[1])
-        return('Not OK')
+        return('Mysql Error')
     
 if __name__ == '__main__':
     saverD = nbNet('0.0.0.0', 50001, logic)

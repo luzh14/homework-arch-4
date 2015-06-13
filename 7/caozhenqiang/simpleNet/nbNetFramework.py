@@ -177,7 +177,6 @@ class nbNet:
             conn = sock_state.sock_obj
             if sock_state.need_read <= 0:
                 self.conn_state[fd].state = 'closing'
-                print "nbNet do closing 187"
                 self.state_machine(fd)
 
             one_read = conn.recv(sock_state.need_read)
@@ -206,9 +205,8 @@ class nbNet:
                 sock_state.state = "process"
                 self.process(fd)
         except (socket.error, ValueError), msg:
-            print msg
             self.conn_state[fd].state = 'closing'
-            print "nbNet do closing 217"
+            print "nbNet do closing 209"
             if msg.errno == 11:
                 return
             # closing directly when error.
@@ -234,7 +232,6 @@ class nbNet:
                 self.epoll_sock.modify(fd, select.EPOLLIN)
         except socket.error, msg:
             sock_state.state = "closing"
-            print "nbNet do closing 243"
             dbgPrint(msg)
         self.state_machine(fd)
 
@@ -263,11 +260,9 @@ class nbNet:
                 if select.EPOLLHUP & events:
                     dbgPrint("EPOLLHUP")
                     sock_state.state = "closing"
-                    print "nbNet do closing 272"
                 elif select.EPOLLERR & events:
                     dbgPrint("EPOLLERR")
                     sock_state.state = "closing"
-                    print "nbNet do closing 276"
                 self.state_machine(fd)
 
     def state_machine(self, fd):

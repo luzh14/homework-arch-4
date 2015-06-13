@@ -16,13 +16,13 @@ def sendFf(d_in,saver_l):
 
 if __name__ == "__main__":
     def logic(d_in):
-        #ret0 = sendFf(d_in, ff_l)
-        ret = sendSaver(d_in, saver_l)
-        if ret == "OK":
-            print "SendSave: OK"
+        ret_ff = sendFf(d_in, ff_l)
+        ret_ss = sendSaver(d_in, saver_l)
+        if ret_ss == "OK":
+            print "SendSave OK"
             return("OK")
         else:
-            return("Error")
+            return("SendSave Error")
     transD = nbNet('0.0.0.0', 50000, logic)
     transD.run()
 
